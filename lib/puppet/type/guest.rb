@@ -93,10 +93,6 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:nodisks) do
-    desc "TODO"
-  end
-
   newparam(:extraargs) do
     desc "TODO"
   end
