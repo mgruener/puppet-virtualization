@@ -32,9 +32,22 @@ Puppet::Type.type(:guest).provide(:libvirt) do
   end
 
   def create
+    # the setup is non-interactive and we want
+    # the guest vm to be offline after the initial setup
+    args = "--force --noautoconsole --noreboot"
+
+    virtinstall args
   end
 
   def remove
+    debug "Trying to destroy domain %s" % [@resource[:name]]
+
+    begin
+      exec { @guest.destroy }
+    rescue Libvirt::Error => e
+      debug "Domain %s already Stopped" % [@resource[:name]]
+    end
+    exec { @guest.undefine }
   end
 
   def purge
