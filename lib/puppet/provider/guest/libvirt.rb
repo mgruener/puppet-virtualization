@@ -65,4 +65,33 @@ private
     return ret
   end
 
+  # Takes an array of hashes and creates a string of the form
+  # "#{prefix} #{options[n][identifier]},#{key}=#{options[n][key]},..."
+  # for each of the n elements in options. For each element,
+  # a number of key=value pairs is appended to the string where
+  # key != identifier.
+  #
+  # This creates valid virt-install options strings, for example
+  # --graphics TYPE,opt1=arg1,opt2=arg2,...
+  # --graphics vnc,password=foobar
+  # where
+  # options    -> [ { type => vnc, password => foobar } ]
+  # prefix     -> "--graphics"
+  # identifier -> "type"
+  def flattenoptions(options, prefix, identifier)
+
+    options = options.kind_of?(Array) ? options : [options]
+
+    string = ""
+    options.each do |option|
+      string += "#{prefix} #{option[identifier]}"
+      option.keys.each do |key|
+        if !(identifier == key)
+          string += ",#{key}=#{option[key]}"
+        end
+      end
+      string += " "
+    end
+    return string.strip
+  end
 end
