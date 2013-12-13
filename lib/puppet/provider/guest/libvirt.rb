@@ -51,7 +51,8 @@ private
 
   def hypervisor
     case @resource[:virttype]
-      when :xen_fullyvirt, :xen_paravirt then "xen:///"
+      when :xen then "xen:///"
+      when :lxc then "lxc:///"
       else "qemu:///system"
     end
   end
