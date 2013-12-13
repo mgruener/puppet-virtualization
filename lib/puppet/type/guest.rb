@@ -129,7 +129,7 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:filesystem) do
+  newparam(:filesystems) do
     desc "TODO"
   end
 
@@ -138,7 +138,7 @@ Puppet::Type.newtype(:guest) do
   end
 
   # networking configuration
-  newparam(:network) do
+  newparam(:networks) do
     desc "TODO"
   end
 
@@ -177,11 +177,11 @@ Puppet::Type.newtype(:guest) do
   end
 
   # device options
-  newparam(:controller) do
+  newparam(:controllers) do
     desc "TODO"
   end
 
-  newparam(:hostdevice) do
+  newparam(:hostdevices) do
     desc "TODO"
   end
 
@@ -197,15 +197,15 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:serial) do
+  newparam(:serialports) do
     desc "TODO"
   end
 
-  newparam(:channel) do
+  newparam(:channels) do
     desc "TODO"
   end
 
-  newparam(:console) do
+  newparam(:consoles) do
     desc "TODO"
   end
 
@@ -213,11 +213,11 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:smartcard) do
+  newparam(:smartcards) do
     desc "TODO"
   end
 
-  newparam(:redirdev) do
+  newparam(:redirdevs) do
     desc "TODO"
   end
 
