@@ -177,6 +177,10 @@ Puppet::Type.newtype(:guest) do
   end
 
   # device options
+  newparam(:controller) do
+    desc "TODO"
+  end
+
   newparam(:hostdevice) do
     desc "TODO"
   end
@@ -210,6 +214,14 @@ Puppet::Type.newtype(:guest) do
   end
 
   newparam(:smartcard) do
+    desc "TODO"
+  end
+
+  newparam(:redirdev) do
+    desc "TODO"
+  end
+
+  newparam(:memballoon) do
     desc "TODO"
   end
 end
