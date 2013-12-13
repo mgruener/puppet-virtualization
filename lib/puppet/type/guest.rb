@@ -85,19 +85,12 @@ Puppet::Type.newtype(:guest) do
   end
 
   # installation options
-  newparam(:cdrom) do
+  newparam(:installmethod) do
     desc "TODO"
+    newvalues(:cdrom, :location, :pxe, :import)
   end
 
-  newparam(:location) do
-    desc "TODO"
-  end
-
-  newparam(:pxe) do
-    desc "TODO"
-  end
-
-  newparam(:import) do
+  newparam(:installmedia) do
     desc "TODO"
   end
 
