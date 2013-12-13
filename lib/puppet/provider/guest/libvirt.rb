@@ -22,11 +22,11 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     if exists?
         return :installed
     else
-      if resource[:ensure].to_s == "purged"
+      if @resource[:ensure].to_s == "purged"
         # TODO: do purged tests
         return :purged
       end
-      debug "Domain %s status: absent" % [resource[:name]]
+      debug "Domain %s status: absent" % [@resource[:name]]
       return :absent
     end
   end
@@ -50,7 +50,7 @@ private
   end
 
   def hypervisor
-    case resource[:virttype]
+    case @resource[:virttype]
       when :xen_fullyvirt, :xen_paravirt then "xen:///"
       else "qemu:///system"
     end
@@ -59,7 +59,7 @@ private
   # Executes operation over guest
   def exec
     conn = Libvirt::open(hypervisor)
-    @guest = conn.lookup_domain_by_name(resource[:name])
+    @guest = conn.lookup_domain_by_name(@resource[:name])
     ret = yield if block_given?
     conn.close
     return ret
