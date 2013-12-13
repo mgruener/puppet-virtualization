@@ -18,6 +18,8 @@ Puppet::Type.newtype(:guest) do
       provider.purge
     end
 
+    defaultto :present
+
     def retrieve
       provider.status
     end

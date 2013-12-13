@@ -15,6 +15,8 @@ Puppet::Type.newtype(:gueststatus) do
     end
     newvalue(:suspended) do
     end
+
+    defaultto :running
   end
 
   autorequire(:guest) do
