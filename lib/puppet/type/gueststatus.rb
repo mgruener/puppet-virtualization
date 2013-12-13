@@ -17,6 +17,9 @@ Puppet::Type.newtype(:gueststatus) do
     end
 
     defaultto :running
+
+    def retrieve
+    end
   end
 
   autorequire(:guest) do
