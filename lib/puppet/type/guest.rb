@@ -2,15 +2,24 @@ Puppet::Type.newtype(:guest) do
   @doc = "TODO"
 
   # TODO: features
+  feature :createguest,
+    "Create a VM guest."
 
   # basic type attributes
   ensurable do
     desc "TODO"
     newvalue(:present) do
+      provider.create
     end
     newvalue(:absent) do
+      provider.remove
     end
     newvalue(:purged) do
+      provider.purge
+    end
+
+    def retrieve
+      provider.status
     end
   end
 
