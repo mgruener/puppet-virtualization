@@ -87,6 +87,9 @@ private
   # a number of key=value pairs is appended to the string where
   # key != identifier.
   #
+  # If identifier is nil the resulting string becomes
+  # "#{prefix} #{key}=#{options[n][key]},..."
+  #
   # This creates valid virt-install options strings, for example
   # --graphics TYPE,opt1=arg1,opt2=arg2,...
   # --graphics vnc,password=foobar
@@ -100,12 +103,13 @@ private
 
     string = ""
     options.each do |option|
-      string += "#{prefix} #{option[identifier]}"
+      string += identifier ? "#{prefix} #{option[identifier]}," : "#{prefix} "
       option.keys.each do |key|
         if !(identifier == key)
-          string += ",#{key}=#{option[key]}"
+          string += "#{key}=#{option[key]},"
         end
       end
+      string.chomp!(",")
       string += " "
     end
     return string.strip
