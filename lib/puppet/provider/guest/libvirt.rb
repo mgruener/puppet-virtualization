@@ -51,6 +51,8 @@ Puppet::Type.type(:guest).provide(:libvirt) do
   end
 
   def purge
+    remove
+    # TODO purge relevant files
   end
 
 private
