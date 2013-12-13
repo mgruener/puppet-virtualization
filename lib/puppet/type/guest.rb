@@ -6,7 +6,7 @@ Puppet::Type.newtype(:guest) do
     "Create a VM guest."
 
   # basic type attributes
-  ensurable do
+  newproperty(:ensure) do
     desc "TODO"
     newvalue(:present) do
       provider.create

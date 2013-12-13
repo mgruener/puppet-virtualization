@@ -7,7 +7,7 @@ Puppet::Type.newtype(:gueststatus) do
     desc "The guest's name."
   end
 
-  ensurable do
+  newproperty(:ensure) do
     desc "TODO"
     newvalue(:running) do
     end
