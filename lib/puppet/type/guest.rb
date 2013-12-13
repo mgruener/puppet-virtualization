@@ -201,6 +201,10 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
+  newparam(:parallelports) do
+    desc "TODO"
+  end
+
   newparam(:channels) do
     desc "TODO"
   end
