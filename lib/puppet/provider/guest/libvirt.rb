@@ -34,167 +34,179 @@ Puppet::Type.type(:guest).provide(:libvirt) do
   def create
     # the setup is non-interactive and we want
     # the guest vm to be offline after the initial setup
-    args = "--name #{@resource[:name]} --force --noautoconsole --noreboot"
+    args = ["--name", @resource[:name], "--force", "--noautoconsole", "--noreboot"]
 
     if @resource[:disks]
-      args << " " << flattenoptions(@resource[:disks],"--disk","source")
+      args << flattenoptions(@resource[:disks],"--disk","source")
     end
 
     if @resource[:filesystems]
-      args << " " << flattenoptions(@resource[:filesystems],"--filesystem",nil)
+      args << flattenoptions(@resource[:filesystems],"--filesystem",nil)
     end
 
     if @resource[:networks]
-      args << " " << flattenoptions(@resource[:networks],"--network","type")
+      args << flattenoptions(@resource[:networks],"--network","type")
     end
 
     if @resource[:graphics]
-      args << " " << flattenoptions(@resource[:graphics],"--graphics","type")
+      args << flattenoptions(@resource[:graphics],"--graphics","type")
     end
 
     if @resource[:controllers]
-      args << " " << flattenoptions(@resource[:controllers],"--controller","type")
+      args << flattenoptions(@resource[:controllers],"--controller","type")
     end
 
     if @resource[:serialports]
-      args << " " << flattenoptions(@resource[:serialports],"--serial","type")
+      args << flattenoptions(@resource[:serialports],"--serial","type")
     end
 
     if @resource[:parallelports]
-      args << " " << flattenoptions(@resource[:parallelports],"--parallel","type")
+      args << flattenoptions(@resource[:parallelports],"--parallel","type")
     end
 
     if @resource[:channels]
-      args << " " << flattenoptions(@resource[:channels],"--channel","type")
+      args << flattenoptions(@resource[:channels],"--channel","type")
     end
 
     if @resource[:consoles]
-      args << " " << flattenoptions(@resource[:consoles],"--console","type")
+      args << flattenoptions(@resource[:consoles],"--console","type")
     end
 
     if @resource[:smartcards]
-      args << " " << flattenoptions(@resource[:smartcards],"--smartcard","mode")
+      args << flattenoptions(@resource[:smartcards],"--smartcard","mode")
     end
 
     if @resource[:redirdevs]
-      args << " " << flattenoptions(@resource[:redirdevs],"--redirdev","bus")
+      args << flattenoptions(@resource[:redirdevs],"--redirdev","bus")
     end
 
     [:livecd, :nodisks, :nonetworks, :hvm, :paravirt, :container, :noapic, :noacpi].each do |option|
       if @resource[option]
-        args << " " << "--#{option}"
+        args << "--#{option}"
       end
     end
 
-    [:ram, :arch,:machine,:uuid,:cpuset,:description,:init, :boot, :memballoon, :video].each do |option|
+    [:ram, :arch, :machine, :uuid, :cpuset, :description, :init, :boot, :memballoon, :video].each do |option|
       if @resource[option]
-        args << " " << "--#{option} #{@resource[option]}"
+        args << "--#{option}" << @resource[option]
       end
     end
 
     if @resource[:hostdevices]
       Array(@resource[:hostdevices]).each do |device|
-        args << " " << "--host-device #{device}"
+        args << "--host-device" << "#{device}"
       end
     end
 
     if @resource[:soundhw]
       Array(@resource[:soundhw]).each do |device|
-        args << " " << "--soundhw #{device}"
+        args << "--soundhw" << "#{device}"
       end
     end
 
     if @resource[:initrdinject]
-      args << " " << "--initrd-inject #{@resource[:initrdinject]}"
+      args << "--initrd-inject" << @resource[:initrdinject]
     end
 
     if @resource[:extraargs]
-      args << " " << "--extra-args #{@resource[:extraargs]}"
+      args << "--extra-args" << @resource[:extraargs]
     end
 
     if @resource[:virttype]
-      args << " " << "--virt-type #{@resource[:virttype]}"
+      args << "--virt-type" << @resource[:virttype]
     end
 
     if @resource[:ostype]
-      args << " " << "--os-type #{@resource[:ostype]}"
+      args << "--os-type" << @resource[:ostype]
     end
 
     if @resource[:osvariant]
-      args << " " << "--os-variant #{@resource[:osvariant]}"
+      args << "--os-variant" << @resource[:osvariant]
     end
 
     if @resource[:watchdogmodel]
-      args << " " << "--watchdog #{@resource[:watchdogmodel]}"
+      args << "--watchdog"
+      tmparg = @resource[:watchdogmodel]
       if @resource[:watchdogaction]
-        args << ",action=#{@resource[:watchdogaction]}"
+        tmparg << ",action=#{@resource[:watchdogaction]}"
       end
+      args << tmparg
     end
 
     if @resource[:vcpus]
-      args << " " << "--vcpus #{@resource[:vcpus]}"
+      args << "--vcpus"
+      tmparg = @resource[:vcpus]
       if @resource[:maxvcpus]
-        args << ",maxvcpus=#{@resource[:maxvcpus]}"
+        tmparg << ",maxvcpus=#{@resource[:maxvcpus]}"
       end
       if @resource[:vcpusockets]
-        args << ",sockets=#{@resource[:vcpusockets]}"
+        tmparg << ",sockets=#{@resource[:vcpusockets]}"
       end
       if @resource[:vcpucores]
-        args << ",cores=#{@resource[:vcpucores]}"
+        tmparg << ",cores=#{@resource[:vcpucores]}"
       end
       if @resource[:vcputhreads]
-        args << ",threads=#{@resource[:vcputhreads]}"
+        tmparg << ",threads=#{@resource[:vcputhreads]}"
       end
+      args << tmparg
     end
 
     if @resource[:cpumodel]
-      args << " " << "--cpu #{@resource[:cpumodel]}"
+      args << "--cpu"
+      tmparg = @resource[:cpumodel]
       if @resource[:cpumatch]
-        args << ",match=#{@resource[:cpumatch]}"
+        tmparg << ",match=#{@resource[:cpumatch]}"
       end
       if @resource[:cpuvendor]
-        args << ",vendor=#{@resource[:cpuvendor]}"
+        tmparg << ",vendor=#{@resource[:cpuvendor]}"
       end
       if @resource[:cpufeatures]
         Array(@resource[:cpufeatures]).each do |feature|
-          args << ",#{feature}"
+          tmparg << ",#{feature}"
         end
       end
+      args << tmparg
     end
 
     if @resource[:securitytype]
-      args << " " << "--security type=#{@resource[:securitytype]}"
+      args << "--security"
+      tmparg = "type=#{@resource[:securitytype]}"
       if @resource[:securitylabel]
-        args << ",label=#{@resource[:securitylabel]}"
+        tmparg << ",label=#{@resource[:securitylabel]}"
       end
       if @resource[:securityrelabel]
-        args << ",relabel=#{@resource[:securityrelabel]}"
+        tmparg << ",relabel=#{@resource[:securityrelabel]}"
       end
+      args << tmparg
     else
       if @resource[:securitylabel]
-        args << " " << "--security label=#{@resource[:securitylabel]}"
+        args << "--security"
+        tmparg = "label=#{@resource[:securitylabel]}"
         if @resource[:securityrelabel]
-          args << ",relabel=#{@resource[:securityrelabel]}"
+          tmparg << ",relabel=#{@resource[:securityrelabel]}"
         end
+        args << tmparg
       end
     end
 
     if @resource[:numatune]
-      args << " " << "--numatune \"#{@resource[:numatune]}\""
+      args << "--numatune"
+      tmparg = "\"#{@resource[:numatune]}\""
       if @resource[:numamode]
-        args << ",mode=#{@resource[:numamode]}"
+        tmparg << ",mode=#{@resource[:numamode]}"
       end
+      args << tmparg
     end
 
     case @resource[:installmethod]
       when :cdrom
-        args << " " << "--cdrom #{@resource[:installmedia]}"
+        args << "--cdrom" << @resource[:installmedia]
       when :location
-        args << " " << "--location #{@resource[:installmedia]}"
+        args << "--location" << @resource[:installmedia]
       when :pxe
-        args << " " << "--pxe"
+        args << "--pxe"
       when :import
-        args << " " << "--import"
+        args << "--import"
       else "TODO"
     end
 
@@ -263,17 +275,18 @@ private
 
     options = options.kind_of?(Array) ? options : [options]
 
-    string = ""
+    result = []
     options.each do |option|
-      string += identifier ? "#{prefix} #{option[identifier]}," : "#{prefix} "
+      result << "#{prefix}"
+      string = identifier ? "#{option[identifier]}," : ""
       option.keys.each do |key|
         if !(identifier == key)
-          string += "#{key}=#{option[key]},"
+          string << "#{key}=#{option[key]},"
         end
       end
       string.chomp!(",")
-      string += " "
+      result << string
     end
-    return string.strip
+    return result
   end
 end
