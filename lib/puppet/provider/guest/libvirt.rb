@@ -124,6 +124,13 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       args << " " << "--os-variant #{@resource[:osvariant]}"
     end
 
+    if @resource[:watchdogmodel]
+      args << " " << "--watchdog #{@resource[:watchdogmodel]}"
+      if @resource[:watchdogaction]
+        args << ",action=#{@resource[:watchdogaction]}"
+      end
+    end
+
     case @resource[:installmethod]
       when :cdrom
         args << " " << "--cdrom #{@resource[:installmedia]}"
