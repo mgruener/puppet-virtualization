@@ -52,6 +52,22 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
+  newparam(:maxvcpus) do
+    desc "TODO"
+  end
+
+  newparam(:vcpusockets) do
+    desc "TODO"
+  end
+
+  newparam(:vcpucores) do
+    desc "TODO"
+  end
+
+  newparam(:vcputhreads) do
+    desc "TODO"
+  end
+
   newparam(:cpuset) do
     desc "TODO"
   end
