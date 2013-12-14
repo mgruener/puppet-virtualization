@@ -72,6 +72,10 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       args << " " << flattenoptions(@resource[:consoles],"--console","type")
     end
 
+    if @resource[:smartcards]
+      args << " " << flattenoptions(@resource[:smartcards],"--smartcard","mode")
+    end
+
     if @resource[:redirdevs]
       args << " " << flattenoptions(@resource[:redirdevs],"--redirdev","bus")
     end
@@ -80,6 +84,56 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       if @resource[option]
         args << " " << "--#{option}"
       end
+    end
+
+    [:ram, :arch,:machine,:uuid,:cpuset,:description,:init, :boot, :memballoon, :video].each do |option|
+      if @resource[option]
+        args << " " << "--#{option} #{@resource[option]}"
+      end
+    end
+
+    if @resource[:hostdevices]
+      Array(@resource[:hostdevices]).each do |device|
+        args << " " << "--host-device #{device}"
+      end
+    end
+
+    if @resource[:soundhw]
+      Array(@resource[:soundhw]).each do |device|
+        args << " " << "--soundhw #{device}"
+      end
+    end
+
+    if @resource[:initrdinject]
+      args << " " << "--initrd-inject #{@resource[:initrdinject]}"
+    end
+
+    if @resource[:extraargs]
+      args << " " << "--extra-args #{@resource[:extraargs]}"
+    end
+
+    if @resource[:virttype]
+      args << " " << "--virt-type #{@resource[:virttype]}"
+    end
+
+    if @resource[:ostype]
+      args << " " << "--os-type #{@resource[:ostype]}"
+    end
+
+    if @resource[:osvariant]
+      args << " " << "--os-variant #{@resource[:osvariant]}"
+    end
+
+    case @resource[:installmethod]
+      when :cdrom
+        args << " " << "--cdrom #{@resource[:installmedia]}"
+      when :location
+        args << " " << "--location #{@resource[:installmedia]}"
+      when :pxe
+        args << " " << "--pxe"
+      when :import
+        args << " " << "--import"
+      else "TODO"
     end
 
     virtinstall args
