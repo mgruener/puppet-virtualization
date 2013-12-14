@@ -179,6 +179,13 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       end
     end
 
+    if @resource[:numatune]
+      args << " " << "--numatune \"#{@resource[:numatune]}\""
+      if @resource[:numamode]
+        args << ",mode=#{@resource[:numamode]}"
+      end
+    end
+
     case @resource[:installmethod]
       when :cdrom
         args << " " << "--cdrom #{@resource[:installmedia]}"
