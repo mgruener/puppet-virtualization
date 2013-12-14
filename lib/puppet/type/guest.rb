@@ -185,7 +185,13 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:watchdog) do
+  newparam(:watchdogmodel) do
+    desc "TODO"
+
+    defaultto "default"
+  end
+
+  newparam(:watchdogaction) do
     desc "TODO"
   end
 
