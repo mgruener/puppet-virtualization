@@ -76,7 +76,19 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:cpu) do
+  newparam(:cpumodel) do
+    desc "TODO"
+  end
+
+  newparam(:cpufeatures) do
+    desc "TODO"
+  end
+
+  newparam(:cpumatch) do
+    desc "TODO"
+  end
+
+  newparam(:cpuvendor) do
     desc "TODO"
   end
 
