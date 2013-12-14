@@ -20,7 +20,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
 
   def status
     if exists?
-        return :installed
+        return :present
     else
       if @resource[:ensure].to_s == "purged"
         if @resource[:disks]
