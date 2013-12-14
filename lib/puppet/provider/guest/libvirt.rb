@@ -162,6 +162,23 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       end
     end
 
+    if @resource[:securitytype]
+      args << " " << "--security type=#{@resource[:securitytype]}"
+      if @resource[:securitylabel]
+        args << ",label=#{@resource[:securitylabel]}"
+      end
+      if @resource[:securityrelabel]
+        args << ",relabel=#{@resource[:securityrelabel]}"
+      end
+    else
+      if @resource[:securitylabel]
+        args << " " << "--security label=#{@resource[:securitylabel]}"
+        if @resource[:securityrelabel]
+          args << ",relabel=#{@resource[:securityrelabel]}"
+        end
+      end
+    end
+
     case @resource[:installmethod]
       when :cdrom
         args << " " << "--cdrom #{@resource[:installmedia]}"
