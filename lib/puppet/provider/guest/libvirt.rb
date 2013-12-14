@@ -36,6 +36,46 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     # the guest vm to be offline after the initial setup
     args = "--force --noautoconsole --noreboot"
 
+    if @resource[:disks]
+      args << " " << flattenoptions(@resource[:disks],"--disk","source")
+    end
+
+    if @resource[:filesystems]
+      args << " " << flattenoptions(@resource[:filesystems],"--filesystem",nil)
+    end
+
+    if @resource[:networks]
+      args << " " << flattenoptions(@resource[:networks],"--network","type")
+    end
+
+    if @resource[:graphics]
+      args << " " << flattenoptions(@resource[:graphics],"--graphics","type")
+    end
+
+    if @resource[:controllers]
+      args << " " << flattenoptions(@resource[:controllers],"--controller","type")
+    end
+
+    if @resource[:serialports]
+      args << " " << flattenoptions(@resource[:serialports],"--serial","type")
+    end
+
+    if @resource[:parallelports]
+      args << " " << flattenoptions(@resource[:parallelports],"--parallel","type")
+    end
+
+    if @resource[:channels]
+      args << " " << flattenoptions(@resource[:channels],"--channel","type")
+    end
+
+    if @resource[:consoles]
+      args << " " << flattenoptions(@resource[:consoles],"--console","type")
+    end
+
+    if @resource[:redirdevs]
+      args << " " << flattenoptions(@resource[:redirdevs],"--redirdev","bus")
+    end
+
     virtinstall args
   end
 
