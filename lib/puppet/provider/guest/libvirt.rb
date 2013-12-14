@@ -113,7 +113,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     [:ram, :arch, :machine, :uuid, :cpuset, :description, :init, :boot, :memballoon, :video].each do |option|
       if @resource[option]
         debug "option: #{option} ; value: #{@resource[option]}"
-        args << "--#{option}" << @resource[option]
+        args << "--#{option}" << @resource[option].to_s
       end
     end
 
@@ -172,7 +172,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     if @resource[:vcpus]
       debug "Adding vcpus"
       args << "--vcpus"
-      tmparg = @resource[:vcpus]
+      tmparg = @resource[:vcpus].to_s
       if @resource[:maxvcpus]
         tmparg << ",maxvcpus=#{@resource[:maxvcpus]}"
       end
