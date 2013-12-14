@@ -96,7 +96,15 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:security) do
+  newparam(:securitytype) do
+    desc "TODO"
+  end
+
+  newparam(:securitylabel) do
+    desc "TODO"
+  end
+
+  newparam(:securityrelabel, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
   end
 
