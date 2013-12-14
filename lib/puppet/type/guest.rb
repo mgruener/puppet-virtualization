@@ -29,18 +29,6 @@ Puppet::Type.newtype(:guest) do
     desc "The guest's name."
   end
 
-  newparam(:datastore) do
-    desc "The global datastore path for guest images"
-  
-    defaultto "/var/lib/libvirt/images"
-  end
-
-  newparam(:gueststore) do
-    desc "Directory below the datastore to store this guests files"
-
-    defaultto "#{@resource[:datastore]}/#{@resource[:name]}"
-  end
-
   # general options
   newparam(:memory) do
     desc "TODO"
