@@ -201,10 +201,6 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:parallel) do
-    desc "TODO"
-  end
-
   newparam(:serialports) do
     desc "TODO"
   end
