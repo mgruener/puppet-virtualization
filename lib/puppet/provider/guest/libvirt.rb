@@ -265,7 +265,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       when :import
         args << "--import"
         debug "Installation method: #{@resource[:installmethod]}"
-      else notice "No installation method set!"
+      else fail "No valid installation method selected. Valid values are cdrom, location, pxe and import (default)"
     end
 
     virtinstall args
