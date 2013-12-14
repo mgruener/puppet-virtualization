@@ -30,7 +30,7 @@ Puppet::Type.newtype(:guest) do
   end
 
   # general options
-  newparam(:memory) do
+  newparam(:ram) do
     desc "TODO"
 
     defaultto 512
