@@ -23,8 +23,19 @@ Puppet::Type.type(:guest).provide(:libvirt) do
         return :installed
     else
       if @resource[:ensure].to_s == "purged"
-        # TODO: do purged tests
-        return :purged
+        if @resource[:disks]
+          purged = true
+          diskimagfiles(@resource[:disks]).each do |file|
+            if File.exists?(file)
+              purged = false
+            end
+          end
+          if purged
+            return :purged
+          end
+        else
+          return :purged
+        end
       end
       debug "Domain %s status: absent" % [@resource[:name]]
       return :absent
@@ -261,8 +272,22 @@ Puppet::Type.type(:guest).provide(:libvirt) do
   end
 
   def purge
+    # do a normal undefine on the guest vm
     remove
-    # TODO purge relevant files
+
+    # remove all diskimages
+    # only purge disks where source="path=..." and device=disk
+    # pool=/vol= as well as device=floppy/device=cdrom
+    # have probably been created independently from the guest
+    # and should remain untouched by this operation
+    if @resource[:disks]
+      diskimagefiles(@resource[:disks]).each do |file|
+        if File.exists?(file)
+          debug "Deleting disk image #{file}"
+          File.delete(file)
+        end
+      end
+    end
   end
 
 private
@@ -324,5 +349,28 @@ private
       result << string
     end
     return result
+  end
+
+  # disks: array of hashes [ { key = vaules, key = values }, ... ]
+  #   representing the disks of a guest vm
+  # returns: array of filenames where source == "path=..." and
+  #   device=disk
+  def diskimagefiles(disks)
+
+    result = []
+ 
+    disks = disks.kind_of?(Array) ? disks : [disks]
+    disks.each do |disk|
+      if !disk.has_key?(:source)
+        fail "Missing source parameter for guest disk"
+      end
+  
+      source = disk[:source].split('=')
+      if source[0] == "path"
+        if (!disk.has_key?(:device)) || (disk[:device] == "disk")
+          result << source[1]
+        end
+      end
+    end
   end
 end
