@@ -147,6 +147,21 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       end
     end
 
+    if @resource[:cpumodel]
+      args << " " << "--cpu #{@resource[:cpumodel]}"
+      if @resource[:cpumatch]
+        args << ",match=#{@resource[:cpumatch]}"
+      end
+      if @resource[:cpuvendor]
+        args << ",vendor=#{@resource[:cpuvendor]}"
+      end
+      if @resource[:cpufeatures]
+        Array(@resource[:cpufeatures]).each do |feature|
+          args << ",#{feature}"
+        end
+      end
+    end
+
     case @resource[:installmethod]
       when :cdrom
         args << " " << "--cdrom #{@resource[:installmedia]}"
