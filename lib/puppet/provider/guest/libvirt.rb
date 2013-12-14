@@ -131,6 +131,22 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       end
     end
 
+    if @resource[:vcpus]
+      args << " " << "--vcpus #{@resource[:vcpus]}"
+      if @resource[:maxvcpus]
+        args << ",maxvcpus=#{@resource[:maxvcpus]}"
+      end
+      if @resource[:vcpusockets]
+        args << ",sockets=#{@resource[:vcpusockets]}"
+      end
+      if @resource[:vcpucores]
+        args << ",cores=#{@resource[:vcpucores]}"
+      end
+      if @resource[:vcputhreads]
+        args << ",threads=#{@resource[:vcputhreads]}"
+      end
+    end
+
     case @resource[:installmethod]
       when :cdrom
         args << " " << "--cdrom #{@resource[:installmedia]}"
