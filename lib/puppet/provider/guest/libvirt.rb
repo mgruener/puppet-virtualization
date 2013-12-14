@@ -76,6 +76,12 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       args << " " << flattenoptions(@resource[:redirdevs],"--redirdev","bus")
     end
 
+    [:livecd, :nodisks, :nonetworks, :hvm, :paravirt, :container, :noapic, :noacpi].each do |option|
+      if @resource[option]
+        args << " " << "--#{option}"
+      end
+    end
+
     virtinstall args
   end
 
