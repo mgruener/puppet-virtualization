@@ -25,7 +25,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       if @resource[:ensure].to_s == "purged"
         if @resource[:disks]
           purged = true
-          diskimagfiles(@resource[:disks]).each do |file|
+          diskimagefiles(@resource[:disks]).each do |file|
             if File.exists?(file)
               purged = false
             end
@@ -273,7 +273,9 @@ Puppet::Type.type(:guest).provide(:libvirt) do
 
   def purge
     # do a normal undefine on the guest vm
-    remove
+    if exists?
+      remove
+    end
 
     # remove all diskimages
     # only purge disks where source="path=..." and device=disk
@@ -361,13 +363,13 @@ private
  
     disks = disks.kind_of?(Array) ? disks : [disks]
     disks.each do |disk|
-      if !disk.has_key?(:source)
+      if !disk.has_key?("source")
         fail "Missing source parameter for guest disk"
       end
   
-      source = disk[:source].split('=')
+      source = disk["source"].split('=')
       if source[0] == "path"
-        if (!disk.has_key?(:device)) || (disk[:device] == "disk")
+        if (!disk.has_key?("device")) || (disk["device"] == "disk")
           result << source[1]
         end
       end
