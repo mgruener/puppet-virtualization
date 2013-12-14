@@ -37,103 +37,129 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     args = ["--name", @resource[:name], "--force", "--noautoconsole", "--noreboot"]
 
     if @resource[:disks]
+      debug "Adding disks to guest"
       args << flattenoptions(@resource[:disks],"--disk","source")
     end
 
     if @resource[:filesystems]
+      debug "Adding filesystems to guest"
       args << flattenoptions(@resource[:filesystems],"--filesystem",nil)
     end
 
     if @resource[:networks]
+      debug "Adding networks to guest"
       args << flattenoptions(@resource[:networks],"--network","type")
     end
 
     if @resource[:graphics]
+      debug "Adding graphics to guest"
       args << flattenoptions(@resource[:graphics],"--graphics","type")
     end
 
     if @resource[:controllers]
+      debug "Adding controllers to guest"
       args << flattenoptions(@resource[:controllers],"--controller","type")
     end
 
     if @resource[:serialports]
+      debug "Adding serial ports to guest"
       args << flattenoptions(@resource[:serialports],"--serial","type")
     end
 
     if @resource[:parallelports]
+      debug "Adding parallel ports to guest"
       args << flattenoptions(@resource[:parallelports],"--parallel","type")
     end
 
     if @resource[:channels]
+      debug "Adding channels to guest"
       args << flattenoptions(@resource[:channels],"--channel","type")
     end
 
     if @resource[:consoles]
+      debug "Adding consoles to guest"
       args << flattenoptions(@resource[:consoles],"--console","type")
     end
 
     if @resource[:smartcards]
+      debug "Adding smartcards to guest"
       args << flattenoptions(@resource[:smartcards],"--smartcard","mode")
     end
 
     if @resource[:redirdevs]
+      debug "Adding drive redirects to guest"
       args << flattenoptions(@resource[:redirdevs],"--redirdev","bus")
     end
 
+    debug "Configuring options for guest"
     [:livecd, :nodisks, :nonetworks, :hvm, :paravirt, :container, :noapic, :noacpi].each do |option|
       if @resource[option]
+        debug "option: #{option}"
         args << "--#{option}"
       end
     end
 
     [:ram, :arch, :machine, :uuid, :cpuset, :description, :init, :boot, :memballoon, :video].each do |option|
       if @resource[option]
+        debug "option: #{option} ; value: #{@resource[option]}"
         args << "--#{option}" << @resource[option]
       end
     end
 
     if @resource[:hostdevices]
+      debug "Adding host devices to guest"
       Array(@resource[:hostdevices]).each do |device|
+        debug "Device: #{device}"
         args << "--host-device" << "#{device}"
       end
     end
 
     if @resource[:soundhw]
+      debug "Adding sound devices to guest"
       Array(@resource[:soundhw]).each do |device|
+        debug "Device: #{device}"
         args << "--soundhw" << "#{device}"
       end
     end
 
     if @resource[:initrdinject]
+      debug "Inird injects: #{@resource[:initrdinject]}"
       args << "--initrd-inject" << @resource[:initrdinject]
     end
 
     if @resource[:extraargs]
+      debug "Extra arguments: #{@resource[:extraargs]}"
       args << "--extra-args" << @resource[:extraargs]
     end
 
     if @resource[:virttype]
+      debug "virt-type: #{@resource[:virttype]}"
       args << "--virt-type" << @resource[:virttype]
     end
 
     if @resource[:ostype]
+      debug "OS type: #{@resource[:ostype]}"
       args << "--os-type" << @resource[:ostype]
     end
 
     if @resource[:osvariant]
+      debug "OS variant: #{@resource[:osvariant]}"
       args << "--os-variant" << @resource[:osvariant]
     end
 
     if @resource[:watchdogmodel]
+      debug "Adding watchdog"
       args << "--watchdog"
       tmparg = @resource[:watchdogmodel]
       if @resource[:watchdogaction]
         tmparg << ",action=#{@resource[:watchdogaction]}"
       end
+      debug "Watchdog options: #{tmparg}"
       args << tmparg
     end
 
     if @resource[:vcpus]
+      debug "Adding vcpus"
       args << "--vcpus"
       tmparg = @resource[:vcpus]
       if @resource[:maxvcpus]
@@ -148,10 +174,12 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       if @resource[:vcputhreads]
         tmparg << ",threads=#{@resource[:vcputhreads]}"
       end
+      debug "vcpu options: #{tmparg}"
       args << tmparg
     end
 
     if @resource[:cpumodel]
+      debug "Setting cpu features"
       args << "--cpu"
       tmparg = @resource[:cpumodel]
       if @resource[:cpumatch]
@@ -165,10 +193,12 @@ Puppet::Type.type(:guest).provide(:libvirt) do
           tmparg << ",#{feature}"
         end
       end
+      debug "cpu features: #{tmparg}"
       args << tmparg
     end
 
     if @resource[:securitytype]
+      debug "Configuring guest security"
       args << "--security"
       tmparg = "type=#{@resource[:securitytype]}"
       if @resource[:securitylabel]
@@ -177,27 +207,33 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       if @resource[:securityrelabel]
         tmparg << ",relabel=#{@resource[:securityrelabel]}"
       end
+      debug "security options: #{tmparg}"
       args << tmparg
     else
       if @resource[:securitylabel]
+        debug "Configuring guest security"
         args << "--security"
         tmparg = "label=#{@resource[:securitylabel]}"
         if @resource[:securityrelabel]
           tmparg << ",relabel=#{@resource[:securityrelabel]}"
         end
+        debug "security options: #{tmparg}"
         args << tmparg
       end
     end
 
     if @resource[:numatune]
+      debug "Tuning NUMA"
       args << "--numatune"
       tmparg = "\"#{@resource[:numatune]}\""
       if @resource[:numamode]
         tmparg << ",mode=#{@resource[:numamode]}"
       end
+      debug "NUMA options: #{tmparg}"
       args << tmparg
     end
 
+    debug "Installation method: #{@resource[:installmethod]}; Media: #{@resource[:installmedia]}"
     case @resource[:installmethod]
       when :cdrom
         args << "--cdrom" << @resource[:installmedia]
@@ -207,7 +243,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
         args << "--pxe"
       when :import
         args << "--import"
-      else "TODO"
+      else notice "No installation method set!"
     end
 
     virtinstall args
