@@ -34,7 +34,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
   def create
     # the setup is non-interactive and we want
     # the guest vm to be offline after the initial setup
-    args = "--force --noautoconsole --noreboot"
+    args = "--name #{@resource[:name]} --force --noautoconsole --noreboot"
 
     if @resource[:disks]
       args << " " << flattenoptions(@resource[:disks],"--disk","source")
