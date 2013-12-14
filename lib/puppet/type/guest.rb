@@ -100,8 +100,9 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:livecd) do
+  newparam(:livecd, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
+    defaultto false
   end
 
   newparam(:extraargs) do
@@ -133,8 +134,9 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:nodisks) do
+  newparam(:nodisks, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
+    defaultto false
   end
 
   # networking configuration
@@ -142,8 +144,9 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:nonetworks) do
+  newparam(:nonetworks, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
+    defaultto false
   end
 
   # graphics configuration
@@ -152,28 +155,33 @@ Puppet::Type.newtype(:guest) do
   end
 
   # virtualization type options
-  newparam(:hvm) do
+  newparam(:hvm, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
+    defaultto true
   end
 
-  newparam(:paravirt) do
+  newparam(:paravirt, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
+    defaultto false
   end
 
-  newparam(:container) do
+  newparam(:container, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
+    defaultto false
   end
 
   newparam(:virttype) do
     desc "TODO"
   end
 
-  newparam(:noapic) do
+  newparam(:noapic, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
+    defaultto false
   end
 
-  newparam(:noacpi) do
+  newparam(:noacpi, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
+    defaultto false
   end
 
   # device options
