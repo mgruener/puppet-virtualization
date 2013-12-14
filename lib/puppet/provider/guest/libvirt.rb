@@ -252,16 +252,19 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       args << tmparg
     end
 
-    debug "Installation method: #{@resource[:installmethod]}; Media: #{@resource[:installmedia]}"
     case @resource[:installmethod]
       when :cdrom
         args << "--cdrom" << @resource[:installmedia]
+        debug "Installation method: #{@resource[:installmethod]}; Media: #{@resource[:installmedia]}"
       when :location
         args << "--location" << @resource[:installmedia]
+        debug "Installation method: #{@resource[:installmethod]}; Media: #{@resource[:installmedia]}"
       when :pxe
         args << "--pxe"
+        debug "Installation method: #{@resource[:installmethod]}"
       when :import
         args << "--import"
+        debug "Installation method: #{@resource[:installmethod]}"
       else notice "No installation method set!"
     end
 
