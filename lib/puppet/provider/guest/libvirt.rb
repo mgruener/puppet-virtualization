@@ -134,13 +134,21 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     end
 
     if @resource[:initrdinject]
-      debug "Inird injects: #{@resource[:initrdinject]}"
-      args << "--initrd-inject" << @resource[:initrdinject]
+      if @resource[:installmethod] == :location
+        debug "Inird injects: #{@resource[:initrdinject]}"
+        args << "--initrd-inject" << @resource[:initrdinject]
+      else
+        debug "Parameter initrdinject given, but installmethod is not 'location', ignoring"
+      end
     end
 
     if @resource[:extraargs]
-      debug "Extra arguments: #{@resource[:extraargs]}"
-      args << "--extra-args" << @resource[:extraargs]
+      if @resource[:installmethod] == :location
+        debug "Extra arguments: #{@resource[:extraargs]}"
+        args << "--extra-args" << @resource[:extraargs]
+      else
+        debug "Parameter extraargs given, but installmethod is not 'location', ignoring"
+      end
     end
 
     if @resource[:virttype]
