@@ -76,6 +76,10 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
+  newparam(:numamode) do
+    desc "TODO"
+  end
+
   newparam(:cpumodel) do
     desc "TODO"
   end
