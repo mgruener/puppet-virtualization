@@ -183,19 +183,11 @@ Puppet::Type.newtype(:guest) do
   end
 
   # virtualization type options
-  newparam(:hvm, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+  newparam(:virttype)
     desc "TODO"
-    defaultto true
-  end
+    newvalues(:hvm, :paravirt, :container)
 
-  newparam(:paravirt, :boolean => true, :parent => Puppet::Parameter::Boolean) do
-    desc "TODO"
-    defaultto false
-  end
-
-  newparam(:container, :boolean => true, :parent => Puppet::Parameter::Boolean) do
-    desc "TODO"
-    defaultto false
+    defaultto hvm
   end
 
   newparam(:hypervisor) do

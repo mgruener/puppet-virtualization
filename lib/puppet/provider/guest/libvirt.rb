@@ -103,7 +103,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     end
 
     debug "Configuring options for guest"
-    [:livecd, :nodisks, :nonetworks, :hvm, :paravirt, :container, :noapic, :noacpi].each do |option|
+    [:livecd, :nodisks, :nonetworks, :noapic, :noacpi].each do |option|
       if @resource[option]
         debug "option: #{option}"
         args << "--#{option}"
@@ -148,6 +148,21 @@ Puppet::Type.type(:guest).provide(:libvirt) do
         args << "--extra-args" << @resource[:extraargs]
       else
         debug "Parameter extraargs given, but installmethod is not 'location', ignoring"
+      end
+    end
+
+    if @resource[:virtype]
+      case @resource[:virttype]
+        when :hvm
+          args << "--hvm"
+          debug "Using full virtualization"
+        when :paravirt
+          args << "--paravirt"
+          debug "Using paravirtualization"
+        when :container
+          args << "--container"
+          debug "Using container virtualization"
+        else fail "No valid virtualization type choosen. Valid values are paravirt, container and hvm (default)"
       end
     end
 
