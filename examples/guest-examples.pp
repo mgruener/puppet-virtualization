@@ -1,5 +1,10 @@
 class guest-example {
 
+  # NOTE: hypervisor => "..." corresponds to the --virt-type parameter and
+  #       virttype   => "..." corresponds to the --hvm, --paravirt, --container
+  #                     parameters of virt-install. These parameters are named
+  #                     based on what they do instead of what virt-install 
+  #                     calls them.
   guest { "lotsofoptions":
     ensure => present,
     ram => 2048,
