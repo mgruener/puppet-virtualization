@@ -368,9 +368,9 @@ private
     options.each do |option|
       result << "#{prefix}"
       string = identifier ? "#{option[identifier]}," : ""
-      option.keys.each do |key|
+      option.each do |key,value|
         if !(identifier == key)
-          string << "#{key}=#{option[key]},"
+          string << "#{key}=#{value},"
         end
       end
       string.chomp!(",")
