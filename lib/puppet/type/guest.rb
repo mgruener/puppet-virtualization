@@ -198,7 +198,7 @@ Puppet::Type.newtype(:guest) do
     defaultto false
   end
 
-  newparam(:virttype) do
+  newparam(:hypervisor) do
     desc "TODO"
   end
 

@@ -151,9 +151,9 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       end
     end
 
-    if @resource[:virttype]
-      debug "virt-type: #{@resource[:virttype]}"
-      args << "--virt-type" << @resource[:virttype]
+    if @resource[:hypervisor]
+      debug "virt-type: #{@resource[:hypervisor]}"
+      args << "--virt-type" << @resource[:hypervisor]
     end
 
     if @resource[:ostype]
@@ -313,7 +313,7 @@ private
   end
 
   def hypervisor
-    case @resource[:virttype]
+    case @resource[:hypervisor]
       when :xen then "xen:///"
       when :lxc then "lxc:///"
       else "qemu:///system"
