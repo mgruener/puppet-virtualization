@@ -167,7 +167,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     end
 
     if @resource[:hypervisor]
-      debug "virt-type: #{@resource[:hypervisor]}"
+      debug "hypervisor: #{@resource[:hypervisor]}"
       args << "--virt-type" << @resource[:hypervisor]
     end
 
