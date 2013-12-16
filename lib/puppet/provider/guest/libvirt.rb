@@ -344,6 +344,17 @@ private
     return ret
   end
 
+  def redefine_domain(xml)
+    conn = Libvirt::open('qemu:///system')
+    conn.define_domain_xml(xml)
+    conn.close
+  end
+
+  def get_domain_xml(name)
+    xmldoc = Document.new(exec { @guest.xml_desc 3 } )
+    xmldoc.root
+  end
+
   # Takes an array of hashes and creates a string of the form
   # "#{prefix} #{options[n][identifier]},#{key}=#{options[n][key]},..."
   # for each of the n elements in options. For each element,
