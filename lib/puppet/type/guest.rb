@@ -183,7 +183,7 @@ Puppet::Type.newtype(:guest) do
   end
 
   # virtualization type options
-  newparam(:virttype)
+  newparam(:virttype) do
     desc "TODO"
     newvalues(:hvm, :paravirt, :container)
 
