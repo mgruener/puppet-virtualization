@@ -154,7 +154,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       end
     end
 
-    if @resource[:virtype]
+    if @resource[:virttype]
       case @resource[:virttype]
         when :hvm
           args << "--hvm"
