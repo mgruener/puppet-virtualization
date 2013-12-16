@@ -187,7 +187,7 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
     newvalues(:hvm, :paravirt, :container)
 
-    defaultto hvm
+    defaultto :hvm
   end
 
   newparam(:hypervisor) do

@@ -1,4 +1,5 @@
 require 'rexml/document'
+include REXML
 
 Puppet::Type.type(:guest).provide(:libvirt) do
   desc "TODO"
