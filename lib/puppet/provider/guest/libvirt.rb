@@ -332,6 +332,78 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     redefine_domain
   end
 
+  def maxvcpus
+    get_domain_xml 
+    @domain.elements["vcpu"].text.to_i
+  end
+
+  def maxvcpus=(value)
+    @domain.elements["vcpu"].text = value
+    redefine_domain
+  end
+
+  def vcpus
+    get_domain_xml 
+    if @domain.elements["vcpu"].attributes["current"]
+      @domain.elements["vcpu"].attributes["current"]
+    else
+      maxvcpus
+    end
+  end
+
+  def vcpus=(value)
+    @domain.elements["vcpu"].add_attribute('current',value)
+    redefine_domain
+  end
+
+  def vcpusockets
+    get_domain_xml 
+    if @domain.elements["cpu/topology"]
+      @domain.elements["cpu/topology"].attributes["sockets"].to_i
+    end
+  end
+
+  def vcpusockets=(value)
+    if @domain.elements["cpu/topology"]
+      @domain.elements["cpu/topology"].add_attribute("sockets",value)
+    else
+      @domain.elements["cpu"].add_element("topology", { "sockets" => value })
+    end
+    redefine_domain
+  end
+
+  def vcpucores
+    get_domain_xml 
+    if @domain.elements["cpu/topology"]
+      @domain.elements["cpu/topology"].attributes["cores"].to_i
+    end
+  end
+
+  def vcpucores=(value)
+    if @domain.elements["cpu/topology"]
+      @domain.elements["cpu/topology"].add_attribute("cores",value)
+    else
+      @domain.elements["cpu"].add_element("topology", { "cores" => value })
+    end
+    redefine_domain
+  end
+
+  def vcputhreads
+    get_domain_xml 
+    if @domain.elements["cpu/topology"]
+      @domain.elements["cpu/topology"].attributes["threads"].to_i
+    end
+  end
+
+  def vcputhreads=(value)
+    if @domain.elements["cpu/topology"]
+      @domain.elements["cpu/topology"].add_attribute("threads",value)
+    else
+      @domain.elements["cpu"].add_element("topology", { "threads" => value })
+    end
+    redefine_domain
+  end
+
 private
   def virtinstall_version
     @virtinstall_version ||= virtinstall("--version")
