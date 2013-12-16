@@ -323,7 +323,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
 
   def ram
     get_domain_xml 
-    @domain.elements["memory"].text.to_i
+    @domain.elements["memory"].text.to_i / 1024
   end
 
   def ram=(value)
