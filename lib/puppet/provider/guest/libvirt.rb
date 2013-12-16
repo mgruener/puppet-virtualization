@@ -1,3 +1,5 @@
+require 'rexml/document'
+
 Puppet::Type.type(:guest).provide(:libvirt) do
   desc "TODO"
 
@@ -344,15 +346,18 @@ private
     return ret
   end
 
-  def redefine_domain(xml)
+  def redefine_domain(domain)
     conn = Libvirt::open('qemu:///system')
-    conn.define_domain_xml(xml)
+    conn.define_domain_xml(domain.to_s)
     conn.close
   end
 
-  def get_domain_xml(name)
-    xmldoc = Document.new(exec { @guest.xml_desc 3 } )
-    xmldoc.root
+  def get_domain_xml
+    if !@domain
+      xmldoc = Document.new(exec { @guest.xml_desc 3 } )
+      @domain = xmldoc.root
+    end
+    @domain   
   end
 
   # Takes an array of hashes and creates a string of the form
