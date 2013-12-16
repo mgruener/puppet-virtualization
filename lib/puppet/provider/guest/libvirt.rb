@@ -320,6 +320,17 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     end
   end
 
+  def ram
+    get_domain_xml 
+    @domain.elements["memory"].text.to_i
+  end
+
+  def ram=(value)
+    @domain.elements["memory"].text = value
+    @domain.elements["currentMemory"].text = value
+    redefine_domain
+  end
+
 private
   def virtinstall_version
     @virtinstall_version ||= virtinstall("--version")
@@ -346,9 +357,9 @@ private
     return ret
   end
 
-  def redefine_domain(domain)
+  def redefine_domain
     conn = Libvirt::open('qemu:///system')
-    conn.define_domain_xml(domain.to_s)
+    conn.define_domain_xml(@domain.to_s)
     conn.close
   end
 
@@ -357,7 +368,6 @@ private
       xmldoc = Document.new(exec { @guest.xml_desc 3 } )
       @domain = xmldoc.root
     end
-    @domain   
   end
 
   # Takes an array of hashes and creates a string of the form
