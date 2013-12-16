@@ -327,8 +327,8 @@ Puppet::Type.type(:guest).provide(:libvirt) do
   end
 
   def ram=(value)
-    @domain.elements["memory"].text = value
-    @domain.elements["currentMemory"].text = value
+    @domain.elements["memory"].text = value.to_i * 1024
+    @domain.elements["currentMemory"].text = value.to_i * 1024
     redefine_domain
   end
 
