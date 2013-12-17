@@ -181,7 +181,7 @@ Puppet::Type.newtype(:guest) do
   end
 
   newparam(:bootcmdline) do
-    desc
+    desc "TODO"
   end
 
   # storage options
