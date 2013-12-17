@@ -194,12 +194,12 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:noapic, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+  newproperty(:noapic, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
     defaultto false
   end
 
-  newparam(:noacpi, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+  newproperty(:noacpi, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc "TODO"
     defaultto false
   end

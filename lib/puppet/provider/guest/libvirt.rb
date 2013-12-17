@@ -464,6 +464,30 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     redefine_domain
   end
 
+  def noacpi
+    get_domain_xml 
+    @domain.elements["features/acpi"] ? false : true
+  end
+
+  def noacpi=(value)
+    if value
+      @domain.delete_element("features/acpi")
+      redefine_domain
+    end
+  end
+
+  def noapic
+    get_domain_xml 
+    @domain.elements["features/apic"] ? false : true
+  end
+
+  def noapic=(value)
+    if value
+      @domain.delete_element("features/apic")
+      redefine_domain
+    end
+  end
+
 private
   def virtinstall_version
     @virtinstall_version ||= virtinstall("--version")
