@@ -164,7 +164,7 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newproperty(:bootmenut, :boolean => true) do
+  newproperty(:bootmenu, :boolean => true) do
     desc "TODO"
 
     newvalue(:true)
