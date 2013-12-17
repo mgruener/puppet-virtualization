@@ -160,7 +160,7 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newproperty(:bootorder, :parent => Puppet::Property::OrderedList) do
+  newproperty(:bootorder, :array_matching => :all) do
     desc "TODO"
   end
 

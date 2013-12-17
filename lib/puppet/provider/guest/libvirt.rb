@@ -556,7 +556,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       @domain.elements["os"].delete_element("boot")
     end
 
-    value.each do |dev|
+    Array(value).each do |dev|
       @domain.elements["os"].add_element("boot",{ "dev" => dev })
     end
     redefine_domain
