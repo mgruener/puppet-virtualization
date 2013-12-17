@@ -96,7 +96,7 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:description) do
+  newproperty(:description) do
     desc "TODO"
   end
 
