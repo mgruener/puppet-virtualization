@@ -160,27 +160,36 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:bootorder) do
+  newproperty(:bootorder, :parent => Puppet::Property::OrderedList) do
     desc "TODO"
   end
 
-  newparam(:bootmenu) do
+  newproperty(:bootmenut, :boolean => true) do
+    desc "TODO"
+
+    newvalue(:true)
+    newvalue(:false)
+
+    defaultto :false
+
+    munge do |value|
+      @resource.munge_boolean(value)
+    end
+  end
+
+  newproperty(:bootfirmware) do
     desc "TODO"
   end
 
-  newparam(:bootbios) do
+  newproperty(:bootkernel) do
     desc "TODO"
   end
 
-  newparam(:bootkernel) do
+  newproperty(:bootinitrd) do
     desc "TODO"
   end
 
-  newparam(:bootinitrd) do
-    desc "TODO"
-  end
-
-  newparam(:bootcmdline) do
+  newproperty(:bootcmdline) do
     desc "TODO"
   end
 

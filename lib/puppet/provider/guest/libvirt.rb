@@ -122,7 +122,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
 
     if (@resource[:bootorder]) ||
        (@resource[:bootmenu]) ||
-       (@resource[:bootbios]) ||
+       (@resource[:bootfirmware]) ||
        (@resource[:bootkernel]) ||
        (@resource[:bootinitrd]) ||
        (@resource[:bootcmdline])
@@ -138,8 +138,8 @@ Puppet::Type.type(:guest).provide(:libvirt) do
           optionstring << "menu=off,"
         end
       end
-      if @resource[:bootbios]
-        optionstring << "loader=\"#{@resource[:bootbios]}\","
+      if @resource[:bootfirmware]
+        optionstring << "loader=\"#{@resource[:bootfirmware]}\","
       end
       if @resource[:bootkernel]
         optionstring << "kernel=\"#{@resource[:bootkernel]}\","
@@ -530,6 +530,116 @@ Puppet::Type.type(:guest).provide(:libvirt) do
         redefine_domain
       end
     end
+  end
+
+  def bootorder
+    get_domain_xml 
+    order = []
+    @domain.elements.each("os/boot") do |bootdev|
+      order << bootdev.attributes["dev"]
+    end
+    order
+  end
+
+  def bootorder=(value)
+    # the boot order is absolute, so the existing
+    # boot order is deleted before the new one is
+    # defined
+    @domain.elements.each("os/boot") do |dev|
+      @domain.elements["os"].delete_element("boot")
+    end
+
+    value.each do |dev|
+      @domain.elements["os"].add_element("boot",{ "dev" => dev })
+    end
+    redefine_domain
+  end
+
+  def bootmenu
+    get_domain_xml 
+    if @domain.elements["os/bootmenu"]
+      value = @domain.elements["os/bootmenu"].attributes["enable"]
+      if value == "yes"
+        :true
+      else
+        :false
+      end
+    end
+  end
+
+  def bootmenu=(value)
+    if value == :true
+      menu = "yes"
+    else
+      menu = "no"
+    end
+
+    if @domain.elements["os/bootmenu"]
+      @domain.elements["os/bootmenu"].add_attribute("enable",menu)
+    else
+      @domain.elements["os"].add_element("bootmenu", { "enable" => menu })
+    end
+    redefine_domain
+  end
+
+  def bootfirmware
+    get_domain_xml 
+    if @domain.elements["os/loader"]
+      @domain.elements["os/loader"].text
+    end
+  end
+
+  def bootfirmware=(value)
+    if !@domain.elements["os/loader"]
+      @domain.elements["os"].add_element("loader")
+    end
+    @domain.elements["os/loader"].text = value
+    redefine_domain
+  end
+
+  def bootkernel
+    get_domain_xml 
+    if @domain.elements["os/kernel"]
+      @domain.elements["os/kernel"].text
+    end
+  end
+
+  def bootkernel=(value)
+    if !@domain.elements["os/kernel"]
+      @domain.elements["os"].add_element("kernel")
+    end
+    @domain.elements["os/kernel"].text = value
+    redefine_domain
+  end
+
+  def bootinitrd
+    get_domain_xml 
+    if @domain.elements["os/initrd"]
+      @domain.elements["os/initrd"].text
+    end
+  end
+
+  def bootinitrd=(value)
+    if !@domain.elements["os/initrd"]
+      @domain.elements["os"].add_element("initrd")
+    end
+    @domain.elements["os/initrd"].text = value
+    redefine_domain
+  end
+
+  def bootcmdline
+    get_domain_xml 
+    if @domain.elements["os/cmdline"]
+      @domain.elements["os/cmdline"].text
+    end
+  end
+
+  def bootcmdline=(value)
+    if !@domain.elements["os/cmdline"]
+      @domain.elements["os"].add_element("cmdline")
+    end
+    @domain.elements["os/cmdline"].text = value
+    redefine_domain
   end
 
 private
