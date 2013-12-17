@@ -504,7 +504,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
   end
 
   def noacpi=(value)
-    if value = :true
+    if value == :true
       @domain.delete_element("features/acpi")
       redefine_domain
     else
