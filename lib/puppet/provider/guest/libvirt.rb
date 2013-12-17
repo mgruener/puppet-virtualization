@@ -113,11 +113,45 @@ Puppet::Type.type(:guest).provide(:libvirt) do
       end
     end
 
-    [:ram, :arch, :machine, :uuid, :cpuset, :description, :init, :boot, :memballoon, :video].each do |option|
+    [:ram, :arch, :machine, :uuid, :cpuset, :description, :init, :memballoon, :video].each do |option|
       if @resource[option]
         debug "option: #{option} ; value: #{@resource[option]}"
         args << "--#{option}" << @resource[option].to_s
       end
+    end
+
+    if (@resource[:bootorder]) ||
+       (@resource[:bootmenu]) ||
+       (@resource[:bootbios]) ||
+       (@resource[:bootkernel]) ||
+       (@resource[:bootinitrd]) ||
+       (@resource[:bootcmdline])
+      args << "--boot"
+      optionstring = ""
+      if @resource[:bootorder]
+        optionstring << "#{@resource[:bootorder].join(',')},"
+      end
+      if @resource[:bootorder]
+        if @resource[:bootorder] == :true
+          optionstring << "menu=on,"
+        else
+          optionstring << "menu=off,"
+        end
+      end
+      if @resource[:bootbios]
+        optionstring << "loader=\"#{@resource[:bootbios]}\","
+      end
+      if @resource[:bootkernel]
+        optionstring << "kernel=\"#{@resource[:bootkernel]}\","
+      end
+      if @resource[:bootinitrd]
+        optionstring << "initrd=\"#{@resource[:bootinitrd]}\","
+      end
+      if @resource[:bootcmdline]
+        optionstring << "kernel_args=\"#{@resource[:bootcmdline]}\","
+      end
+      # strip any trailing ,
+      args << optionstring.chomp(',')
     end
 
     if @resource[:hostdevices]

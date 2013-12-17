@@ -160,8 +160,28 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:boot) do
+  newparam(:bootorder) do
     desc "TODO"
+  end
+
+  newparam(:bootmenu) do
+    desc "TODO"
+  end
+
+  newparam(:bootbios) do
+    desc "TODO"
+  end
+
+  newparam(:bootkernel) do
+    desc "TODO"
+  end
+
+  newparam(:bootinitrd) do
+    desc "TODO"
+  end
+
+  newparam(:bootcmdline) do
+    desc
   end
 
   # storage options
