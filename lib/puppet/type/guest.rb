@@ -36,7 +36,7 @@ Puppet::Type.newtype(:guest) do
     defaultto 512
   end
 
-  newparam(:arch) do
+  newproperty(:arch) do
     desc "TODO"
   end
 

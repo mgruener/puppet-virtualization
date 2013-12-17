@@ -332,6 +332,16 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     redefine_domain
   end
 
+  def arch
+    get_domain_xml 
+    @domain.elements["os/type"].attributes["arch"]
+  end
+
+  def arch=(value)
+    @domain.elements["os/type"].add_attribute("arch",value)
+    redefine_domain
+  end
+
   def maxvcpus
     get_domain_xml 
     @domain.elements["vcpu"].text.to_i
