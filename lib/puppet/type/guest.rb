@@ -68,7 +68,7 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:cpuset) do
+  newproperty(:cpuset) do
     desc "TODO"
   end
 
