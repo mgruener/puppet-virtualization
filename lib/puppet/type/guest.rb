@@ -88,7 +88,7 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:cpumatch) do
+  newproperty(:cpumatch) do
     desc "TODO"
   end
 
