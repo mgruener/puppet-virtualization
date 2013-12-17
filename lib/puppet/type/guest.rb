@@ -5,6 +5,17 @@ Puppet::Type.newtype(:guest) do
   feature :createguest,
     "Create a VM guest."
 
+  def munge_boolean(value)
+    case value
+    when true, "true", :true
+      :true
+    when false, "false", :false
+      :false
+    else
+      fail("munge_boolean only takes booleans")
+    end
+  end
+
   # basic type attributes
   newproperty(:ensure) do
     desc "TODO"
@@ -194,14 +205,30 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newproperty(:noapic, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+  newproperty(:noapic, :boolean => true) do
     desc "TODO"
-    defaultto false
+
+    newvalue(:true)
+    newvalue(:false)
+
+    defaultto :false
+
+    munge do |value|
+      @resource.munge_boolean(value)
+    end
   end
 
-  newproperty(:noacpi, :boolean => true, :parent => Puppet::Parameter::Boolean) do
+  newproperty(:noacpi, :boolean => true) do
     desc "TODO"
-    defaultto false
+
+    newvalue(:true)
+    newvalue(:false)
+
+    defaultto :false
+
+    munge do |value|
+      @resource.munge_boolean(value)
+    end
   end
 
   # device options

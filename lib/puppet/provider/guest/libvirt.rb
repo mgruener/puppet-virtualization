@@ -466,25 +466,35 @@ Puppet::Type.type(:guest).provide(:libvirt) do
 
   def noacpi
     get_domain_xml 
-    @domain.elements["features/acpi"] ? false : true
+    @domain.elements["features/acpi"] ? :false : :true
   end
 
   def noacpi=(value)
     if value
       @domain.delete_element("features/acpi")
       redefine_domain
+    else
+      if !@domain.elements["features/acpi"]
+        @domain.elements["features"].add_element("acpi")
+        redefine_domain
+      end
     end
   end
 
   def noapic
     get_domain_xml 
-    @domain.elements["features/apic"] ? false : true
+    @domain.elements["features/apic"] ? :false : :true
   end
 
   def noapic=(value)
     if value
       @domain.delete_element("features/apic")
       redefine_domain
+    else
+      if !@domain.elements["features/apic"]
+        @domain.elements["features"].add_element("apic")
+        redefine_domain
+      end
     end
   end
 
