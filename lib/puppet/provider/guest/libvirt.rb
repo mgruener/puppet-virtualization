@@ -106,8 +106,15 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     end
 
     debug "Configuring options for guest"
-    [:livecd, :nodisks, :nonetworks, :noapic, :noacpi].each do |option|
+    [:livecd, :nodisks, :nonetworks ].each do |option|
       if @resource[option]
+        debug "option: #{option}"
+        args << "--#{option}"
+      end
+    end
+
+    [:noacpi, :noapic ].each do |option|
+      if @resource[option] == :true
         debug "option: #{option}"
         args << "--#{option}"
       end
