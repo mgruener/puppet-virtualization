@@ -470,7 +470,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
   end
 
   def noacpi=(value)
-    if value
+    if value = :true
       @domain.delete_element("features/acpi")
       redefine_domain
     else
@@ -487,7 +487,7 @@ Puppet::Type.type(:guest).provide(:libvirt) do
   end
 
   def noapic=(value)
-    if value
+    if value == :true
       @domain.delete_element("features/apic")
       redefine_domain
     else
