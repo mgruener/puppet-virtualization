@@ -92,7 +92,7 @@ Puppet::Type.newtype(:guest) do
     desc "TODO"
   end
 
-  newparam(:cpuvendor) do
+  newproperty(:cpuvendor) do
     desc "TODO"
   end
 

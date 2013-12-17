@@ -434,6 +434,16 @@ Puppet::Type.type(:guest).provide(:libvirt) do
     redefine_domain
   end
 
+  def cpuvendor
+    get_domain_xml 
+    @domain.elements["cpu/vendor"].text
+  end
+
+  def cpuvendor=(value)
+    @domain.elements["cpu/vendor"].text = value
+    redefine_domain
+  end
+
 private
   def virtinstall_version
     @virtinstall_version ||= virtinstall("--version")
